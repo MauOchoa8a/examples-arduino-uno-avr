@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "AVR ATmega328P",
+            "compilerPath": "/opt/homebrew/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega328p"
+            ],
+            "cStandard": "c11",
+            "intelliSenseMode": "macos-gcc-arm64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/opt/avr-gcc@9/avr/include",
+                "/opt/homebrew/opt/avr-gcc@9/lib/avr-gcc/9/gcc/avr/9.5.0/include",
+                "/opt/homebrew/opt/avr-gcc@9/lib/avr-gcc/9/gcc/avr/9.5.0/include-fixed"
+            ],
+            "defines": [
+                "F_CPU=16000000UL"
+            ]
+        }
+    ],
+    "version": 4
+}

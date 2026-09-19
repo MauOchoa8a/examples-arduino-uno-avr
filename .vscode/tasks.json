@@ -1,0 +1,115 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "AVR: Compilar objeto",
+            "type": "process",
+            "command": "avr-gcc",
+            "args": [
+                "-g",
+                "-Os",
+                "-mmcu=atmega328p",
+                "-DF_CPU=16000000UL",
+                "-c",
+                "${fileBasename}",
+                "-o",
+                "${fileBasenameNoExtension}.o"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "AVR: Enlazar ELF",
+            "type": "process",
+            "command": "avr-gcc",
+            "args": [
+                "-g",
+                "-mmcu=atmega328p",
+                "${fileBasenameNoExtension}.o",
+                "-o",
+                "${fileBasenameNoExtension}.elf"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": "AVR: Compilar objeto",
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "AVR: Generar HEX",
+            "type": "process",
+            "command": "avr-objcopy",
+            "args": [
+                "-j",
+                ".text",
+                "-j",
+                ".data",
+                "-O",
+                "ihex",
+                "${fileBasenameNoExtension}.elf",
+                "${fileBasenameNoExtension}.hex"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [],
+            "dependsOn": "AVR: Enlazar ELF",
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "AVR: Compilar y generar HEX",
+            "dependsOn": "AVR: Generar HEX",
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "AVR: Cargar en Arduino Uno",
+            "type": "process",
+            "command": "avrdude",
+            "args": [
+                "-c",
+                "arduino",
+                "-p",
+                "m328p",
+                "-P",
+                "${input:avrPort}",
+                "-b",
+                "115200",
+                "-U",
+                "flash:w:${fileBasenameNoExtension}.hex:i"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [],
+            "dependsOn": "AVR: Compilar y generar HEX",
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "AVR: Compilar y cargar",
+            "dependsOn": "AVR: Cargar en Arduino Uno",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "avrPort",
+            "type": "promptString",
+            "description": "Puerto serie del Arduino Uno",
+            "default": "/dev/cu.usbserial-1240"
+        }
+    ]
+}
