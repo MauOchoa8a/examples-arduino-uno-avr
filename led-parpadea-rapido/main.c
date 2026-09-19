@@ -7,10 +7,10 @@ int main(void) {
 
     while (1) {           
         PORTB |= (1 << PB5);   // Enciende el LED
-        _delay_ms(900);        // <--- CAMBIO: Solo 100 milisegundos encendido (destello rápido)
+        _delay_ms(100);        // <--- CAMBIO: Solo 100 milisegundos encendido (destello rápido)
 
         PORTB &= ~(1 << PB5);  // Apaga el LED
-        _delay_ms(100);        // <--- CAMBIO: 900 milisegundos apagado
+        _delay_ms(900);        // <--- CAMBIO: 900 milisegundos apagado
     }
 
     return 0; 
